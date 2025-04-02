@@ -1,13 +1,13 @@
-package dk.gundmann.scheculer;
+package dk.gundmann.routing;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ScheculerApplication {
+public class RoutingApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ScheculerApplication.class, args);
+		SpringApplication.run(RoutingApplication.class, args);
 	}
 
 }
