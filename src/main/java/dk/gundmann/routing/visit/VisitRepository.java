@@ -1,4 +1,4 @@
-package dk.gundmann.routing.planning;
+package dk.gundmann.routing.visit;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

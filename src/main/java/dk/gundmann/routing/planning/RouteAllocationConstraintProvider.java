@@ -4,7 +4,8 @@ import ai.timefold.solver.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 import ai.timefold.solver.core.api.score.stream.Constraint;
 import ai.timefold.solver.core.api.score.stream.ConstraintFactory;
 import ai.timefold.solver.core.api.score.stream.ConstraintProvider;
-import dk.gundmann.routing.company.Vehicle;
+import dk.gundmann.routing.vehicle.Vehicle;
+import dk.gundmann.routing.visit.Visit;
 import org.jspecify.annotations.NonNull;
 
 public class RouteAllocationConstraintProvider implements ConstraintProvider {
@@ -42,11 +43,11 @@ public class RouteAllocationConstraintProvider implements ConstraintProvider {
     // Soft constraints
     // ************************************************************************
 
-//    protected Constraint minimizeTravelTime(ConstraintFactory factory) {
-//        return factory.forEach(Vehicle.class)
-//                .penalizeLong(HardSoftLongScore.ONE_SOFT,
-//                        Vehicle::getTotalDrivingTimeSeconds)
-//                .asConstraint(MINIMIZE_TRAVEL_TIME);
-//    }
+    protected Constraint minimizeTravelTime(ConstraintFactory factory) {
+        return factory.forEach(Vehicle.class)
+                .penalizeLong(HardSoftLongScore.ONE_SOFT,
+                        Vehicle::getTotalDrivingTimeSeconds)
+                .asConstraint(MINIMIZE_TRAVEL_TIME);
+    }
 
 }

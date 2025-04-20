@@ -1,0 +1,41 @@
+name: Build and Deploy to Self-Hosted Linux
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: docker build -t my-app:latest .
+
+      - name: Save Docker Image to File
+        run: docker save my-app:latest | gzip > my-app.tar.gz
+
+      - name: Copy Image to Remote Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "my-app.tar.gz"
+          target: "/tmp"
+
+      - name: Deploy on Remote Server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            docker load < /tmp/my-app.tar.gz
+            docker stop my-app || true
+            docker rm my-app || true
+            docker run -d --name my-app -p 80:80 my-app:latest

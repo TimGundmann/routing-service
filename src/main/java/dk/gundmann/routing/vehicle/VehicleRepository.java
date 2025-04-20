@@ -1,4 +1,4 @@
-package dk.gundmann.routing.company;
+package dk.gundmann.routing.vehicle;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
