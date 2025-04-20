@@ -50,7 +50,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            docker load < /tmp/my-spring-app.tar.gz
+            docker load < /tmp/routing-service.tar.gz
             docker stop routing-service || true
             docker rm routing-service || true
-            docker run -d --name my-spring-app -p 8080:8080 routing-service:latest
+            docker run -d --name routing-service -p 8080:8080 routing-service:latest
