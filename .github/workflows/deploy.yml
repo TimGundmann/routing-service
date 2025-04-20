@@ -53,4 +53,4 @@ jobs:
             docker load < /tmp/routing-service.tar.gz
             docker stop routing-service || true
             docker rm routing-service || true
-            docker run -d --name routing-service -p 8080:8080 routing-service:latest
+            docker run -d --name routing-service -p 8080:8080 -v $HOME/routing-service/h2:/data/h2 routing-service:latest
