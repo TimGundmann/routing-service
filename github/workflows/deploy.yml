@@ -1,4 +1,4 @@
-name: Build and Deploy to Self-Hosted Linux
+name: Build Spring Boot App and Deploy Docker Image to Linux
 
 on:
   push:
@@ -13,11 +13,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Set up JDK 23
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 23
+
+      - name: Build Spring Boot App
+        run: ./mvnw clean package -DskipTests
+
       - name: Build Docker Image
-        run: docker build -t my-app:latest .
+        run: docker build -t my-spring-app:latest .
 
       - name: Save Docker Image to File
-        run: docker save my-app:latest | gzip > my-app.tar.gz
+        run: docker save my-spring-app:latest | gzip > my-spring-app.tar.gz
 
       - name: Copy Image to Remote Server
         uses: appleboy/scp-action@v0.1.7
@@ -25,7 +34,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "my-app.tar.gz"
+          source: "my-spring-app.tar.gz"
           target: "/tmp"
 
       - name: Deploy on Remote Server
@@ -35,7 +44,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            docker load < /tmp/my-app.tar.gz
-            docker stop my-app || true
-            docker rm my-app || true
-            docker run -d --name my-app -p 80:80 my-app:latest
+            docker load < /tmp/my-spring-app.tar.gz
+            docker stop my-spring-app || true
+            docker rm my-spring-app || true
+            docker run -d --name my-spring-app -p 8080:8080 my-spring-app:latest
